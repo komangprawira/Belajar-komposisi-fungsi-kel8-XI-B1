@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8f4e9">
+<title>Labubu Math Adventure — Komposisi Fungsi</title>
+<style>
+:root{
+ --ink:#182f24;--green:#719c60;--green2:#dcebcf;--green3:#edf5e5;
+ --pink:#f5a9c1;--pink2:#ffe1eb;--cream:#fffaf0;--paper:#fffef9;
+ --yellow:#f6d477;--brown:#8b614d;--muted:#627164;--line:#d9e1d0;
+ --shadow:0 5px 0 rgba(24,47,36,.13);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"Trebuchet MS",system-ui,sans-serif;line-height:1.55}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid #d35f89;outline-offset:3px}
+.app{max-width:560px;min-height:100vh;margin:0 auto;background:var(--paper);position:relative;overflow:hidden;box-shadow:0 0 35px #29472b12}
+.topbar{height:66px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;background:#fffdf7;border-bottom:2px solid #e6eadf;position:sticky;top:0;z-index:10}
+.brand{display:flex;align-items:center;gap:9px;font-weight:1000;letter-spacing:-.5px;color:var(--ink)}
+.brand-mark{width:42px;height:42px;border:2.5px solid var(--ink);border-radius:15px;background:var(--green2);display:grid;place-items:center;box-shadow:3px 3px 0 var(--pink);font-size:23px}
+.top-small{font-size:10px;color:var(--muted);font-weight:900;letter-spacing:1.5px}
+.round-back{width:44px;height:44px;border-radius:50%;border:2.5px solid var(--ink);background:#b9d7f5;box-shadow:3px 3px 0 #7298c9;display:grid;place-items:center;font-size:25px;color:#fff;text-shadow:1px 2px #527db4}
+.hero{padding:23px 20px 16px;text-align:center;position:relative;background:linear-gradient(#fffdf8,#f6faef)}
+.tag{display:inline-block;background:var(--pink2);border:1.5px solid var(--ink);border-radius:999px;padding:5px 12px;font-size:10px;font-weight:1000;letter-spacing:1px}
+h1{font-size:clamp(29px,8vw,42px);line-height:1.03;letter-spacing:-1.8px;margin:13px 0 8px;color:var(--ink)}
+h1 span{color:#c64f7b}
+.hero p{max-width:360px;margin:0 auto;color:var(--muted);font-size:13px}
+.character-area{height:155px;position:relative;display:flex;justify-content:center;align-items:center;margin:3px 0 0}
+.bubble{position:absolute;background:#fff;border:2px solid var(--ink);border-radius:16px;padding:7px 11px;font-size:11px;font-weight:1000;box-shadow:3px 3px 0 var(--pink);z-index:3}
+.bubble.one{left:8px;top:18px;transform:rotate(-5deg)}.bubble.two{right:7px;bottom:17px;background:#fff4bf;transform:rotate(4deg)}
+.monster{width:120px;height:130px;position:relative;animation:bob 3s ease-in-out infinite;filter:drop-shadow(0 5px 0 #1c35241a)}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-5px) rotate(1deg)}}
+.ear{position:absolute;top:0;width:38px;height:62px;background:#91b977;border:3px solid var(--ink);border-radius:75% 25% 65% 20%;z-index:0}
+.ear.left{left:12px;transform:rotate(-18deg)}.ear.right{right:12px;transform:scaleX(-1) rotate(-18deg)}
+.ear:after{content:"";position:absolute;left:9px;top:10px;width:13px;height:34px;border-radius:80% 20% 60% 20%;background:var(--pink)}
+.face{position:absolute;left:5px;right:5px;top:27px;height:96px;background:linear-gradient(140deg,#b9d99a,#82ac68);border:3px solid var(--ink);border-radius:48% 48% 43% 43%;z-index:1}
+.eye{position:absolute;top:33px;width:16px;height:21px;background:#fff;border:2px solid var(--ink);border-radius:50%}
+.eye.left{left:24px}.eye.right{right:24px}.eye:after{content:"";position:absolute;left:5px;top:6px;width:7px;height:10px;background:var(--ink);border-radius:50%}
+.cheek{position:absolute;top:57px;width:15px;height:8px;border-radius:50%;background:#f08ca8}
+.cheek.left{left:9px}.cheek.right{right:9px}
+.mouth{position:absolute;left:35px;top:55px;width:39px;height:25px;background:white;border:2px solid var(--ink);border-radius:5px 5px 16px 16px;overflow:hidden}
+.mouth:before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:#f6b1c5;border-bottom:1.5px solid var(--ink)}
+.mouth:after{content:"";position:absolute;top:7px;left:4px;right:4px;height:10px;background:repeating-linear-gradient(90deg,#fff 0 7px,#d6dfd0 7px 9px)}
+.spark{position:absolute;color:#e5b842;font-size:25px}.spark.s1{left:20px;bottom:15px}.spark.s2{right:22px;top:12px}
+.menu-area{padding:5px 19px 24px;background:linear-gradient(#f6faef,#fffdf8)}
+.menu-caption{text-align:center;font-size:11px;color:var(--muted);font-weight:900;letter-spacing:1.6px;margin:0 0 12px}
+.menu-list{display:flex;flex-direction:column;gap:13px}
+.menu-btn{width:100%;min-height:70px;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;gap:10px;background:#fff;border:2.5px solid #101811;border-radius:19px;padding:13px 44px 16px 16px;box-shadow:4px 4px 0 #d9e6cd;color:#111a13;font-size:clamp(18px,5vw,24px);font-weight:1000;letter-spacing:-.5px;transition:transform .13s,box-shadow .13s}
+.menu-btn:after{content:"";position:absolute;bottom:-15px;left:48%;width:24px;height:22px;background:#fff;border-right:2.5px solid #101811;border-bottom:2.5px solid #101811;transform:skewY(35deg) rotate(13deg);border-bottom-right-radius:6px;z-index:1}
+.menu-btn:hover{transform:translateY(-2px);box-shadow:5px 6px 0 #d9e6cd}
+.menu-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #d9e6cd}
+.menu-btn:nth-child(2){margin-left:5px;width:calc(100% - 5px);background:#fff6f8;box-shadow:4px 4px 0 #f4c6d5}
+.menu-btn:nth-child(3){margin-left:12px;width:calc(100% - 12px);background:#f8f9e9}
+.menu-btn:nth-child(4){margin-left:4px;width:calc(100% - 4px);background:#fff7dc;box-shadow:4px 4px 0 #efdfa7}
+.menu-btn:nth-child(5){margin-left:10px;width:calc(100% - 10px);background:#f0f7ff;box-shadow:4px 4px 0 #cadcf0}
+.menu-btn:before{content:"";position:absolute;right:12px;top:50%;transform:translateY(-50%);width:34px;height:34px;background:var(--green2);border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center}
+.menu-btn .mini{position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:2;font-size:20px}
+.scene-footer{height:110px;position:relative;overflow:hidden;background:linear-gradient(#fffdf8 0 15%,#b8d7f5 15% 100%);border-top:2px solid #e5eadf}
+.hill{position:absolute;bottom:-46px;width:115%;height:100px;left:-7%;background:#689bd4;border-radius:50% 50% 0 0}
+.hill:after{content:"";position:absolute;top:-18px;left:8%;width:90%;height:28px;background:#f5fbff;border-radius:50%;transform:rotate(-2deg)}
+.ship{position:absolute;left:50%;bottom:15px;transform:translateX(-50%);width:210px;height:47px;background:#fff;border:3px solid #294b6c;border-radius:15px 15px 34px 34px;clip-path:polygon(0 0,100% 0,86% 100%,14% 100%)}
+.ship:before{content:"";position:absolute;left:65px;top:-17px;width:80px;height:22px;background:#fff;border:3px solid #294b6c;border-radius:9px}
+.ship:after{content:"";position:absolute;left:82px;top:-11px;width:48px;height:9px;background:#f3a4bc;border-radius:4px}
+.window-dots{position:absolute;left:50%;bottom:25px;transform:translateX(-50%);display:flex;gap:11px;z-index:2}
+.window-dots i{width:7px;height:7px;border-radius:50%;background:#294b6c}
+.footer-brand{text-align:center;padding:15px 12px 17px;font-size:14px;font-weight:1000;letter-spacing:1px;color:#324c3a;background:#fffdf8;border-top:1px solid #e7ebdf}
+.footer-brand small{display:block;font-size:9px;letter-spacing:2px;color:#829083;margin-top:3px}
+.page{display:none;min-height:calc(100vh - 66px);padding:20px 18px 35px;background:linear-gradient(#fffdf8,#f7faef)}
+.page.active{display:block;animation:appear .2s ease-out}
+@keyframes appear{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}
+.page-head{text-align:center;margin:3px 0 19px}
+.page-head .sticker{font-size:35px;display:block;margin-bottom:3px}
+.page-head h2{font-size:27px;line-height:1.1;margin:0 0 7px;letter-spacing:-1px}
+.page-head p{font-size:12px;color:var(--muted);margin:0}
+.back-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.back-btn{border:2px solid var(--ink);background:#b9d7f5;border-radius:50%;width:42px;height:42px;font-size:23px;box-shadow:3px 3px 0 #7fa5d1}
+.back-label{font-size:11px;font-weight:900;letter-spacing:1.2px;color:var(--muted)}
+.content-card{background:#fff;border:2px solid var(--ink);border-radius:17px;padding:16px;margin:13px 0;box-shadow:3px 4px 0 #dce8d3}
+.content-card h3{margin:0 0 8px;font-size:17px}
+.content-card p,.content-card li{font-size:13px;color:#4b5c4e}
+.content-card p:last-child{margin-bottom:0}
+.formula{background:#edf5e5;border:1.5px dashed #7da46a;border-radius:12px;padding:12px;margin:10px 0;text-align:center;font-weight:1000;font-size:16px;overflow-wrap:anywhere}
+.note{padding:11px;background:#fff0f5;border-left:4px solid var(--pink);border-radius:0 10px 10px 0;font-size:12px;color:#754459;margin:11px 0}
+.topic-nav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:15px}
+.topic-nav button{border:1.5px solid var(--ink);background:#fff;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900}
+.topic-nav button.active{background:var(--green2)}
+.topic{display:none}.topic.active{display:block}
+.primary,.secondary{border:2px solid var(--ink);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:1000}
+.primary{background:var(--green2);box-shadow:3px 3px 0 var(--ink)}
+.secondary{background:#fff;box-shadow:3px 3px 0 #e8c6d2}
+.action-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
+.quiz-option{display:block;width:100%;text-align:left;border:1.5px solid #d4dfcd;background:#fff;border-radius:11px;padding:10px 12px;margin:7px 0;font-size:13px;font-weight:800;color:var(--ink)}
+.quiz-option:hover{background:#f7fbeF;border-color:var(--green)}
+.quiz-option.correct{background:#e0f4df;border-color:#4f9c63}.quiz-option.wrong{background:#ffe6eb;border-color:#d75a7e}
+.feedback{font-size:12px;font-weight:900;margin-top:9px;min-height:18px}.ok{color:#287744}.no{color:#b23b59}
+.score-pill{display:inline-block;background:var(--pink2);border:1.5px solid var(--ink);border-radius:999px;padding:6px 11px;font-size:12px;font-weight:1000}
+.progress{height:9px;border-radius:99px;background:#e4eadc;overflow:hidden;margin:10px 0 15px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#ef9fbb,#8db777);transition:width .2s}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.match-card{border:1.5px solid #d6e0cf;background:#fff;border-radius:12px;padding:10px;font-size:12px;font-weight:900;text-align:center;min-height:54px}
+.match-card.chosen{background:#ffe1eb;border-color:#d45e83}.match-card.matched{background:#e1f3dc;border-color:#6ca75c}
+.result-box{background:#fff0f5;border:2px solid var(--ink);border-radius:17px;text-align:center;padding:18px;margin-top:14px}
+.big-score{font-size:42px;font-weight:1000;color:#315b3c;line-height:1}
+.bottom-nav{display:flex;gap:7px;flex-wrap:wrap;margin-top:20px}
+.bottom-nav button{flex:1;min-width:100px}
+@media(min-width:600px){.app{margin:20px auto;border:1px solid #e0e5d8;border-radius:24px;min-height:calc(100vh - 40px)}.topbar{border-radius:24px 24px 0 0}.menu-area{padding-left:32px;padding-right:32px}.hero{padding-top:28px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+ <div class="brand"><div class="brand-mark">👾</div><div>LABUBU MATH<div class="top-small">KOMPOSISI FUNGSI</div></div></div>
+ <button class="round-back" id="topBack" aria-label="Kembali ke menu">↶</button>
+</header>
+
+<section id="home" class="page active" style="padding:0">
+ <div class="hero">
+  <span class="tag">🌿 MATH ADVENTURE 🌿</span>
+  <h1>Belajar Komposisi<br>Fungsi <span>Bareng!</span></h1>
+  <p>Temani monster hutan belajar matematika. Tekan tombol di bawah untuk membuka setiap petualangan.</p>
+  <div class="character-area">
+   <span class="spark s1">✦</span><span class="spark s2">✧</span>
+   <span class="bubble one">Ayo belajar! 🌸</span><span class="bubble two">Kamu pasti bisa!</span>
+   <div class="monster" aria-label="Monster hijau lucu"><div class="ear left"></div><div class="ear right"></div><div class="face"><span class="eye left"></span><span class="eye right"></span><span class="cheek left"></span><span class="cheek right"></span><span class="mouth"></span></div></div>
+  </div>
+ </div>
+ <div class="menu-area">
+  <div class="menu-caption">✨ PILIH MENU PETUALANGAN ✨</div>
+  <div class="menu-list">
+   <button class="menu-btn" data-page="materi">Materi <span class="mini">📚</span></button>
+   <button class="menu-btn" data-page="coba">Mari Kita Coba <span class="mini">✏️</span></button>
+   <button class="menu-btn" data-page="games">Mini Games <span class="mini">🎮</span></button>
+   <button class="menu-btn" data-page="tes">Final Test <span class="mini">🧠</span></button>
+   <button class="menu-btn" data-page="petunjuk">Petunjuk Penggunaan <span class="mini">🧭</span></button>
+  </div>
+ </div>
+ <div class="scene-footer"><div class="hill"></div><div class="ship"></div><div class="window-dots"><i></i><i></i><i></i><i></i><i></i></div></div>
+ <div class="footer-brand">🌱 LABUBU MATH ADVENTURE <small>BELAJAR · BERLATIH · BERTUMBUH</small></div>
+</section>
+
+<section id="materi" class="page">
+ <div class="back-row"><button class="back-btn" data-home>←</button><span class="back-label">KEMBALI KE MENU</span></div>
+ <div class="page-head"><span class="sticker">📚🌿</span><h2>Materi Komposisi Fungsi</h2><p>Pilih topik yang ingin kamu pelajari.</p></div>
+ <div class="topic-nav" id="topicNav">
+  <button class="active" data-topic="t1">1. Fungsi</button><button data-topic="t2">2. Notasi</button><button data-topic="t3">3. Langkah</button><button data-topic="t4">4. Urutan</button><button data-topic="t5">5. Sifat</button><button data-topic="t6">6. Domain</button><button data-topic="t7">7. Tiga fungsi</button><button data-topic="t8">8. Aplikasi</button><button data-topic="t9">9. Fungsi Invers</button>
+ </div>
+ <article class="content-card topic active" id="t1"><h3>1. Mengingat Kembali Konsep Fungsi</h3><p>Fungsi adalah aturan yang memasangkan setiap anggota domain (daerah asal) dengan tepat satu anggota kodomain (daerah kawan). Anggota kodomain yang benar-benar dihasilkan disebut range (daerah hasil).</p><div class="formula">f : A → B &nbsp; dan &nbsp; y = f(x)</div><p>Contoh: f(x)=2x+1. Jika x=3, maka f(3)=2(3)+1=7. Jadi, 3 adalah masukan dan 7 adalah keluaran.</p><div class="note"><b>Ingat!</b> Setiap masukan hanya boleh memiliki satu keluaran pada sebuah fungsi.</div></article>
+ <article class="content-card topic" id="t2"><h3>2. Pengertian dan Notasi Komposisi</h3><p>Komposisi fungsi adalah penggabungan dua fungsi atau lebih secara berurutan. Keluaran fungsi pertama menjadi masukan untuk fungsi berikutnya.</p><div class="formula">(f ∘ g)(x) = f(g(x))</div><p>Dibaca “f komposisi g dari x”. Fungsi g dikerjakan lebih dahulu, kemudian hasilnya dimasukkan ke fungsi f.</p><p>Contoh: f(x)=2x+3 dan g(x)=x², maka (f∘g)(x)=f(x²)=2x²+3.</p></article>
+ <article class="content-card topic" id="t3"><h3>3. Langkah Menghitung Komposisi</h3><ol><li>Tulis bentuk komposisi, misalnya (f∘g)(x).</li><li>Ubah menjadi f(g(x)).</li><li>Ganti setiap x pada f(x) dengan seluruh bentuk g(x).</li><li>Gunakan tanda kurung dengan benar.</li><li>Sederhanakan hasilnya.</li></ol><div class="formula">f(x)=3x−2, g(x)=x+4</div><p>f(g(x))=f(x+4)=3(x+4)−2=3x+12−2.</p><div class="formula">(f∘g)(x)=3x+10</div></article>
+ <article class="content-card topic" id="t4"><h3>4. Mengapa Urutan Fungsi Penting?</h3><p>(f∘g)(x) dan (g∘f)(x) tidak selalu sama karena urutan memasukkan nilai berbeda.</p><p>Misalkan f(x)=2x+1 dan g(x)=x².</p><div class="formula">(f∘g)(x)=f(x²)=2x²+1</div><div class="formula">(g∘f)(x)=g(2x+1)=(2x+1)²</div><p>Hasilnya berbeda. Jadi, komposisi fungsi pada umumnya tidak komutatif.</p></article>
+ <article class="content-card topic" id="t5"><h3>5. Sifat Komposisi Fungsi</h3><p><b>Tidak komutatif secara umum:</b> f∘g tidak selalu sama dengan g∘f.</p><p><b>Asosiatif:</b> pengelompokan tiga fungsi dapat diubah tanpa mengubah urutannya, selama semua komposisi terdefinisi.</p><div class="formula">f∘(g∘h)=(f∘g)∘h</div><p><b>Fungsi identitas:</b> I(x)=x tidak mengubah nilai ketika dikomposisikan.</p><div class="formula">f∘I=I∘f=f</div></article>
+ <article class="content-card topic" id="t6"><h3>6. Domain Komposisi Fungsi</h3><p>Domain (f∘g) memuat nilai x yang berada pada domain g dan membuat g(x) berada pada domain f.</p><div class="formula">x ∈ Dom(g) dan g(x) ∈ Dom(f)</div><p>Contoh: f(x)=√x dan g(x)=x−2. Maka (f∘g)(x)=√(x−2). Agar akar real terdefinisi, x−2≥0, sehingga x≥2.</p><div class="note">Untuk akar kuadrat, isi akar harus ≥0. Untuk pecahan, penyebut tidak boleh sama dengan 0.</div></article>
+ <article class="content-card topic" id="t7"><h3>7. Komposisi Tiga Fungsi</h3><p>Untuk tiga fungsi, hitung mulai dari fungsi yang paling dalam.</p><div class="formula">(f∘g∘h)(x)=f(g(h(x)))</div><p>Misalkan f(x)=x+1, g(x)=2x, h(x)=x².</p><p>h(x)=x², lalu g(h(x))=2x², kemudian f(2x²)=2x²+1.</p><div class="formula">(f∘g∘h)(x)=2x²+1</div></article>
+ <article class="content-card topic" id="t8"><h3>8. Penerapan dalam Kehidupan Sehari-hari</h3><p>Komposisi dapat memodelkan proses bertahap, misalnya diskon harga lalu penambahan biaya layanan.</p><p>Harga awal x mendapat diskon 10%, d(x)=0,9x. Setelah itu ditambah biaya layanan Rp5.000, b(x)=x+5.000.</p><div class="formula">(b∘d)(x)=0,9x+5.000</div><p>Jika harga awal Rp100.000, harga akhirnya 0,9(100.000)+5.000=Rp95.000.</p></article>
+ <article class="content-card topic" id="t9"><h3>9. Fungsi Invers</h3>
+ <p>Fungsi invers adalah fungsi yang membalik proses suatu fungsi. Jika fungsi f mengubah masukan x menjadi keluaran y, maka fungsi invers f⁻¹ mengubah y kembali menjadi x.</p>
+ <div class="formula">Jika f(a)=b, maka f⁻¹(b)=a</div>
+ <p><b>Syarat fungsi memiliki invers:</b> fungsi harus satu-satu (setiap keluaran berasal dari paling banyak satu masukan) agar inversnya juga merupakan fungsi. Pada grafik, fungsi satu-satu lolos uji garis horizontal.</p>
+ <h3>Langkah mencari invers</h3><ol><li>Ganti f(x) dengan y.</li><li>Tukar posisi x dan y.</li><li>Selesaikan persamaan hingga y menjadi subjek.</li><li>Ganti y dengan f⁻¹(x).</li></ol>
+ <div class="formula">Contoh: f(x)=2x+6</div>
+ <p>Langkah 1: y=2x+6.</p><p>Langkah 2: tukar x dan y, sehingga x=2y+6.</p><p>Langkah 3: x−6=2y, jadi y=(x−6)/2.</p>
+ <div class="formula">f⁻¹(x)=(x−6)/2</div>
+ <p><b>Pemeriksaan:</b> f(f⁻¹(x))=2((x−6)/2)+6=x. Hasilnya kembali menjadi x, sehingga inversnya benar.</p>
+ <h3>Hubungan invers dan komposisi</h3><div class="formula">(f∘f⁻¹)(x)=(f⁻¹∘f)(x)=x</div>
+ <p>Komposisi fungsi dengan inversnya menghasilkan fungsi identitas, selama nilai x berada pada domain yang sesuai.</p>
+ <div class="note"><b>Jangan tertukar!</b> f⁻¹(x) bukan berarti 1/f(x). Simbol −1 menunjukkan fungsi invers, bukan pangkat −1 pada nilai fungsi.</div>
+ <h3>Contoh tambahan</h3><p>Diketahui f(x)=3x−9. Tentukan inversnya.</p><p>y=3x−9 → x=3y−9 → x+9=3y → y=(x+9)/3.</p>
+ <div class="formula">f⁻¹(x)=(x+9)/3</div>
+ <p>Contoh fungsi yang tidak memiliki invers sebagai fungsi pada seluruh bilangan real adalah f(x)=x², karena f(2)=4 dan f(−2)=4. Dua masukan berbeda memiliki keluaran yang sama. Fungsi ini bisa dibatasi domainnya, misalnya x≥0, agar memiliki invers f⁻¹(x)=√x untuk x≥0.</p>
+ <div class="content-card" style="background:#fff6f8"><h3>Latihan Fungsi Invers</h3><p>Jika f(x)=4x−8, maka f⁻¹(x)=...</p><div id="inverseOptions"></div><div class="feedback" id="inverseFeedback"></div><button class="secondary" id="inverseAgain">Coba lagi</button></div>
+ </article>
+ <div class="bottom-nav"><button class="secondary" id="prevTopic">← Topik sebelumnya</button><button class="primary" id="nextTopic">Topik berikutnya →</button></div>
+</section>
+
+<section id="coba" class="page">
+ <div class="back-row"><button class="back-btn" data-home>←</button><span class="back-label">KEMBALI KE MENU</span></div>
+ <div class="page-head"><span class="sticker">✏️🌸</span><h2>Mari Kita Coba!</h2><p>Pelajari contoh, lalu pilih jawaban latihan.</p></div>
+ <div class="content-card"><h3>Contoh 1 · Komposisi aljabar</h3><p>Diketahui f(x)=2x+3 dan g(x)=x²−1. Tentukan (f∘g)(x).</p><p>f(g(x))=f(x²−1)=2(x²−1)+3=2x²−2+3.</p><div class="formula">Jawaban: 2x²+1</div></div>
+ <div class="content-card"><h3>Contoh 2 · Urutan dibalik</h3><p>Dengan f(x)=2x+3 dan g(x)=x²−1, tentukan (g∘f)(x).</p><p>g(f(x))=(2x+3)²−1=4x²+12x+9−1.</p><div class="formula">Jawaban: 4x²+12x+8</div></div>
+ <div class="content-card"><h3>Contoh 3 · Nilai komposisi</h3><p>f(x)=x−5 dan g(x)=3x+2. Tentukan (f∘g)(4).</p><p>g(4)=14, kemudian f(14)=14−5.</p><div class="formula">Jawaban: 9</div></div>
+ <div class="content-card" id="practiceCard"><h3>Latihan interaktif</h3><p>Diketahui f(x)=x+6 dan g(x)=2x. Nilai (f∘g)(3) adalah ...</p><div id="practiceOptions"></div><div class="feedback" id="practiceFeedback"></div><button class="secondary" id="practiceAgain">Coba lagi</button></div>
+ <div class="bottom-nav"><button class="primary" data-page="games">Lanjut ke Mini Games →</button></div>
+</section>
+
+<section id="games" class="page">
+ <div class="back-row"><button class="back-btn" data-home>←</button><span class="back-label">KEMBALI KE MENU</span></div>
+ <div class="page-head"><span class="sticker">🎮👾</span><h2>Mini Games</h2><p>Main sambil mengasah pemahaman komposisi fungsi.</p></div>
+ <div class="topic-nav"><button class="active" data-game="tebak">🎯 Tebak Hasil</button><button data-game="pasang">🧩 Pasangkan</button><button data-game="cepat">⏱️ Tantangan 60 Detik</button></div>
+ <div class="content-card gamepanel" id="game-tebak"><h3>🎯 Tebak Hasil</h3><div class="score-pill">Skor: <span id="guessScore">0</span></div><div class="progress"><span id="guessProgress"></span></div><p id="guessCount">Soal 1 dari 5</p><p id="guessQuestion" style="font-weight:900"></p><div id="guessOptions"></div><div class="feedback" id="guessFeedback"></div><div class="action-row"><button class="primary" id="guessNext" disabled>Berikutnya →</button><button class="secondary" id="guessRestart">Mulai ulang</button></div></div>
+ <div class="content-card gamepanel" id="game-pasang" style="display:none"><h3>🧩 Pasangkan Fungsi</h3><p>Pilih satu kartu di kiri, lalu pilih hasil yang sesuai di kanan.</p><div class="score-pill">Pasangan benar: <span id="matchScore">0</span>/4</div><div class="match-grid" id="matchGrid" style="margin-top:12px"></div><div class="feedback" id="matchFeedback"></div><button class="secondary" id="matchRestart">Acak ulang</button></div>
+ <div class="content-card gamepanel" id="game-cepat" style="display:none"><h3>⏱️ Tantangan 60 Detik</h3><div class="score-pill">Waktu: <span id="timer">60</span> detik · Skor: <span id="fastScore">0</span></div><p id="fastQuestion" style="font-weight:900;margin-top:12px">Tekan mulai untuk bermain!</p><div id="fastOptions"></div><div class="feedback" id="fastFeedback"></div><div class="action-row"><button class="primary" id="fastStart">Mulai</button><button class="secondary" id="fastReset">Atur ulang</button></div></div>
+ <div class="bottom-nav"><button class="primary" data-page="tes">Lanjut ke Final Test →</button></div>
+</section>
+
+<section id="tes" class="page">
+ <div class="back-row"><button class="back-btn" data-home>←</button><span class="back-label">KEMBALI KE MENU</span></div>
+ <div class="page-head"><span class="sticker">🧠⭐</span><h2>Final Test</h2><p>10 soal pilihan ganda · Setiap jawaban benar bernilai 10 poin.</p></div>
+ <div class="content-card"><div class="score-pill">Terjawab: <span id="answered">0</span>/10</div><div class="progress"><span id="testProgress"></span></div><div id="testQuestions"></div><div class="action-row"><button class="primary" id="submitTest">Periksa Jawaban</button><button class="secondary" id="resetTest">Ulangi Tes</button></div><div class="feedback" id="testFeedback"></div><div id="testResult" class="result-box" style="display:none"></div><div id="testReview" style="display:none"></div></div>
+</section>
+
+<section id="petunjuk" class="page">
+ <div class="back-row"><button class="back-btn" data-home>←</button><span class="back-label">KEMBALI KE MENU</span></div>
+ <div class="page-head"><span class="sticker">🧭🌷</span><h2>Petunjuk Penggunaan</h2><p>Ikuti langkah sederhana ini untuk memulai petualangan.</p></div>
+ <div class="content-card"><h3>1. Tekan menu yang diinginkan</h3><p>Pada halaman awal, tekan tombol Materi, Mari Kita Coba, Mini Games, Final Test, atau Petunjuk Penggunaan. Setiap tombol akan membuka halaman berbeda.</p></div>
+ <div class="content-card"><h3>2. Pelajari materi bertahap</h3><p>Di halaman Materi, tekan tombol topik 1–8. Gunakan tombol “Topik sebelumnya” dan “Topik berikutnya” untuk berpindah.</p></div>
+ <div class="content-card"><h3>3. Kerjakan latihan dan permainan</h3><p>Pilih jawaban pada latihan atau mini games. Website akan memberi tahu apakah jawabanmu benar dan menjelaskan cara menghitungnya.</p></div>
+ <div class="content-card"><h3>4. Kerjakan Final Test</h3><p>Pilih satu jawaban pada setiap soal. Setelah semua soal dijawab, tekan “Periksa Jawaban” untuk melihat nilai dan pembahasan. Tekan “Ulangi Tes” untuk mencoba lagi.</p></div>
+ <div class="content-card"><h3>5. Kembali ke menu utama</h3><p>Tekan tombol panah ← di bagian atas halaman. Website ini bisa dibuka lewat HP maupun komputer, tanpa perlu memasang aplikasi.</p></div>
+ <div class="bottom-nav"><button class="primary" data-page="materi">Mulai Belajar →</button><button class="secondary" data-home>Ke Menu Utama</button></div>
+</section>
+</div>
+
+<script>
+const pages=[...document.querySelectorAll('.page')];
+function showPage(id){pages.forEach(p=>p.classList.toggle('active',p.id===id));window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+document.querySelectorAll('[data-home]').forEach(b=>b.addEventListener('click',()=>showPage('home')));
+document.getElementById('topBack').addEventListener('click',()=>showPage('home'));
+
+const topics=[...document.querySelectorAll('.topic')], topicButtons=[...document.querySelectorAll('[data-topic]')];let topicIndex=0;
+function setTopic(i){topicIndex=(i+topics.length)%topics.length;topics.forEach((x,j)=>x.classList.toggle('active',j===topicIndex));topicButtons.forEach((x,j)=>x.classList.toggle('active',j===topicIndex));}
+topicButtons.forEach((b,i)=>b.addEventListener('click',()=>setTopic(i)));
+document.getElementById('prevTopic').onclick=()=>setTopic(topicIndex-1);
+document.getElementById('nextTopic').onclick=()=>setTopic(topicIndex+1);
+
+const practice=[['9',false],['12',true],['15',false],['18',false]];
+function renderPractice(){const root=document.getElementById('practiceOptions');root.innerHTML='';document.getElementById('practiceFeedback').textContent='';practice.forEach(([v,ok])=>{const b=document.createElement('button');b.className='quiz-option';b.textContent=v;b.onclick=()=>{[...root.children].forEach(x=>x.disabled=true);[...root.children].forEach((x,i)=>{if(practice[i][1])x.classList.add('correct')});if(ok){document.getElementById('practiceFeedback').textContent='Benar! g(3)=6, lalu f(6)=12.';document.getElementById('practiceFeedback').className='feedback ok'}else{b.classList.add('wrong');document.getElementById('practiceFeedback').textContent='Belum tepat. Hitung g(3)=6, kemudian f(6)=12.';document.getElementById('practiceFeedback').className='feedback no'}};root.appendChild(b)})}
+
+document.getElementById('practiceAgain').onclick=renderPractice;renderPractice();
+
+const inverseChoices=[['4x+8',false],['(x+8)/4',true],['(x-8)/4',false],['4/(x-8)',false]];
+function renderInversePractice(){
+ const root=document.getElementById('inverseOptions'); if(!root)return;
+ root.innerHTML=''; const feedback=document.getElementById('inverseFeedback'); feedback.textContent=''; feedback.className='feedback';
+ inverseChoices.forEach(([v,ok])=>{
+  const b=document.createElement('button'); b.className='quiz-option'; b.textContent=v;
+  b.onclick=()=>{
+   [...root.children].forEach(x=>x.disabled=true);
+   [...root.children].forEach((x,i)=>{if(inverseChoices[i][1])x.classList.add('correct')});
+   if(ok){feedback.textContent='Benar! y=4x−8 → x=4y−8 → y=(x+8)/4.';feedback.className='feedback ok'}
+   else{b.classList.add('wrong');feedback.textContent='Belum tepat. Tukar x dan y, lalu selesaikan: x=4y−8.';feedback.className='feedback no'}
+  };
+  root.appendChild(b);
+ });
+}
+document.getElementById('inverseAgain')?.addEventListener('click',renderInversePractice);
+renderInversePractice();
+
+
+document.querySelectorAll('[data-game]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-game]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.gamepanel').forEach(p=>p.style.display=p.id==='game-'+b.dataset.game?'block':'none')}));
+const guessData=[
+{q:'f(x)=2x+1 dan g(x)=x+3. (f∘g)(x)=...',o:['2x+4','2x+7','2x+1','x+7'],a:1,e:'2(x+3)+1=2x+7.'},
+{q:'f(x)=x² dan g(x)=x−2. (f∘g)(x)=...',o:['x²−2','(x−2)²','x²+4','2x²'],a:1,e:'f(g(x))=(x−2)².'},
+{q:'f(x)=3x dan g(x)=x+4. (f∘g)(2)=...',o:['18','14','10','6'],a:0,e:'g(2)=6, lalu f(6)=18.'},
+{q:'(f∘g)(x) sama dengan...',o:['g(f(x))','f(g(x))','f(x)+g(x)','f(x)g(x)'],a:1,e:'Komposisi f dengan g adalah f(g(x)).'},
+{q:'Pada umumnya komposisi fungsi...',o:['selalu komutatif','tidak komutatif','selalu nol','selalu konstan'],a:1,e:'Urutan fungsi umumnya mengubah hasil.'}
+];let gi=0,gs=0,gLocked=false;
+function renderGuess(){const d=guessData[gi];gLocked=false;document.getElementById('guessCount').textContent=`Soal ${gi+1} dari ${guessData.length}`;document.getElementById('guessQuestion').textContent=d.q;document.getElementById('guessScore').textContent=gs;document.getElementById('guessFeedback').textContent='';document.getElementById('guessNext').disabled=true;document.getElementById('guessProgress').style.width=(gi/guessData.length*100)+'%';const root=document.getElementById('guessOptions');root.innerHTML='';d.o.forEach((v,i)=>{const b=document.createElement('button');b.className='quiz-option';b.textContent=String.fromCharCode(65+i)+'. '+v;b.onclick=()=>{if(gLocked)return;gLocked=true;[...root.children].forEach((x,j)=>{x.disabled=true;if(j===d.a)x.classList.add('correct')});if(i===d.a){gs+=20;document.getElementById('guessScore').textContent=gs;document.getElementById('guessFeedback').textContent='Tepat! '+d.e;document.getElementById('guessFeedback').className='feedback ok'}else{b.classList.add('wrong');document.getElementById('guessFeedback').textContent='Belum tepat. '+d.e;document.getElementById('guessFeedback').className='feedback no'}document.getElementById('guessNext').disabled=false;document.getElementById('guessProgress').style.width=((gi+1)/guessData.length*100)+'%'};root.appendChild(b)})}
+document.getElementById('guessNext').onclick=()=>{if(gi<guessData.length-1){gi++;renderGuess()}else{document.getElementById('guessQuestion').textContent='Selesai! Skor kamu '+gs+'/100.';document.getElementById('guessOptions').innerHTML='';document.getElementById('guessFeedback').textContent='Tekan Mulai ulang untuk mencoba lagi.';document.getElementById('guessNext').disabled=true;document.getElementById('guessProgress').style.width='100%'}};
+document.getElementById('guessRestart').onclick=()=>{gi=0;gs=0;renderGuess()};renderGuess();
+
+const pairData=[{l:'f(x)=2x+1',r:'f(g(x)) jika g(x)=x+3'},{l:'g(x)=x²',r:'g(2x)=4x²'},{l:'f(x)=x−5',r:'f(14)=9 jika masukan 14'},{l:'f(x)=x+2, g(x)=3x',r:'(f∘g)(x)=3x+2'}];let selectedMatch=null,matched=new Set();
+function renderMatch(){selectedMatch=null;matched=new Set();document.getElementById('matchScore').textContent='0';document.getElementById('matchFeedback').textContent='';const root=document.getElementById('matchGrid');root.innerHTML='';const items=[...pairData.map((p,i)=>({text:p.l,id:i,side:'l'})),...pairData.map((p,i)=>({text:p.r,id:i,side:'r'})).sort(()=>Math.random()-.5)];items.forEach(it=>{const b=document.createElement('button');b.className='match-card';b.textContent=it.text;b.dataset.id=it.id;b.dataset.side=it.side;b.onclick=()=>{if(b.classList.contains('matched'))return;if(it.side==='l'){if(selectedMatch)selectedMatch.classList.remove('chosen');selectedMatch=b;b.classList.add('chosen');document.getElementById('matchFeedback').textContent='Sekarang pilih kartu hasil yang sesuai.';return}if(!selectedMatch){document.getElementById('matchFeedback').textContent='Pilih kartu di kiri dahulu.';return}if(selectedMatch.dataset.id===b.dataset.id){selectedMatch.classList.remove('chosen');selectedMatch.classList.add('matched');b.classList.add('matched');selectedMatch.disabled=true;b.disabled=true;matched.add(it.id);document.getElementById('matchScore').textContent=matched.size;document.getElementById('matchFeedback').textContent=matched.size===4?'Hebat! Semua pasangan benar.':'Benar! Lanjutkan.';document.getElementById('matchFeedback').className='feedback ok';selectedMatch=null}else{document.getElementById('matchFeedback').textContent='Belum cocok. Coba lagi!';document.getElementById('matchFeedback').className='feedback no'}};root.appendChild(b)})}
+document.getElementById('matchRestart').onclick=renderMatch;renderMatch();
+
+const fastData=[
+{q:'f(x)=x+4, g(x)=2x. (f∘g)(3)=...',o:['10','14','18','6'],a:0,e:'g(3)=6, lalu f(6)=10.'},
+{q:'f(x)=2x, g(x)=x−1. (f∘g)(x)=...',o:['2x−2','2x−1','x−2','2x+1'],a:0,e:'2(x−1)=2x−2.'},
+{q:'f(x)=x², g(x)=3x. (f∘g)(x)=...',o:['3x²','x²+3','9x²','6x'],a:2,e:'(3x)²=9x².'},
+{q:'f(x)=x+5, g(x)=2x. (g∘f)(1)=...',o:['12','7','2','14'],a:0,e:'f(1)=6, lalu g(6)=12.'},
+{q:'Dalam (f∘g∘h)(x), fungsi pertama yang dikerjakan adalah...',o:['f','g','h','f dan g'],a:2,e:'Fungsi terdalam h dikerjakan pertama.'}
+];let fastTimer=null,fastTime=60,fastScore=0,fastActive=false;
+function fastNew(){const d=fastData[Math.floor(Math.random()*fastData.length)];document.getElementById('fastQuestion').textContent=d.q;document.getElementById('fastOptions').innerHTML='';document.getElementById('fastFeedback').textContent='';d.o.forEach((v,i)=>{const b=document.createElement('button');b.className='quiz-option';b.textContent=String.fromCharCode(65+i)+'. '+v;b.onclick=()=>{if(!fastActive||b.disabled)return;[...document.getElementById('fastOptions').children].forEach(x=>x.disabled=true);if(i===d.a){fastScore+=10;document.getElementById('fastScore').textContent=fastScore;document.getElementById('fastFeedback').textContent='Benar! '+d.e;document.getElementById('fastFeedback').className='feedback ok'}else{b.classList.add('wrong');document.getElementById('fastFeedback').textContent=d.e;document.getElementById('fastFeedback').className='feedback no'}setTimeout(()=>{if(fastActive)fastNew()},700)};document.getElementById('fastOptions').appendChild(b)})}
+document.getElementById('fastStart').onclick=()=>{if(fastActive)return;fastActive=true;document.getElementById('fastStart').disabled=true;fastNew();fastTimer=setInterval(()=>{fastTime--;document.getElementById('timer').textContent=fastTime;if(fastTime<=0){clearInterval(fastTimer);fastActive=false;document.getElementById('fastStart').disabled=false;document.getElementById('fastQuestion').textContent='Waktu habis! Skor akhir: '+fastScore;document.getElementById('fastOptions').innerHTML=''}},1000)};
+document.getElementById('fastReset').onclick=()=>{clearInterval(fastTimer);fastActive=false;fastTime=60;fastScore=0;document.getElementById('timer').textContent='60';document.getElementById('fastScore').textContent='0';document.getElementById('fastQuestion').textContent='Tekan mulai untuk bermain!';document.getElementById('fastOptions').innerHTML='';document.getElementById('fastFeedback').textContent='';document.getElementById('fastStart').disabled=false};
+
+const testData=[
+{q:'Notasi (f∘g)(x) berarti...',o:['f(x)+g(x)','f(g(x))','g(f(x))','f(x)×g(x)'],a:1,e:'Definisi komposisi adalah f(g(x)).'},
+{q:'f(x)=2x+3, g(x)=x−1. (f∘g)(x)=...',o:['2x+1','2x+2','2x+3','x+2'],a:0,e:'2(x−1)+3=2x+1.'},
+{q:'f(x)=x², g(x)=x+2. (f∘g)(x)=...',o:['x²+2','(x+2)²','x²+4','2x²'],a:1,e:'f(g(x))=(x+2)².'},
+{q:'f(x)=3x−2, g(x)=x+4. (f∘g)(x)=...',o:['3x+10','3x+2','3x−6','x+10'],a:0,e:'3(x+4)−2=3x+10.'},
+{q:'f(x)=x+1, g(x)=2x, h(x)=x². (f∘g∘h)(x)=...',o:['2x²+1','(2x+1)²','x²+3','2x+1'],a:0,e:'h=x², g(h)=2x², lalu f=2x²+1.'},
+{q:'f(x)=2x+1 dan g(x)=x². Nilai (f∘g)(2)=...',o:['5','8','9','10'],a:2,e:'g(2)=4, lalu f(4)=9.'},
+{q:'Pernyataan benar secara umum adalah...',o:['f∘g selalu sama g∘f','komposisi selalu komutatif','f∘g umumnya tidak sama g∘f','komposisi hanya untuk dua fungsi'],a:2,e:'Urutan fungsi umumnya memengaruhi hasil.'},
+{q:'f(x)=x−5 dan g(x)=3x+2. Nilai (f∘g)(4)=...',o:['9','14','11','19'],a:0,e:'g(4)=14, lalu f(14)=9.'},
+{q:'Harga x didiskon 10%, lalu ditambah biaya Rp5.000. Fungsi akhir...',o:['0,9x−5000','0,1x+5000','0,9x+5000','x+5000'],a:2,e:'Diskon menghasilkan 0,9x, lalu ditambah 5.000.'},
+{q:'Proses dikali 5 lalu dikurangi 4 dapat ditulis...',o:['(f∘g)(x)','(g∘f)(x), f(x)=5x, g(x)=x−4','f(x)+g(x)','(f∘f)(x)'],a:1,e:'Kalikan dulu dengan f, lalu gunakan g.'}
+];let answers={},testSubmitted=false;
+function renderTest(){answers={};testSubmitted=false;document.getElementById('testResult').style.display='none';document.getElementById('testReview').style.display='none';document.getElementById('testFeedback').textContent='';document.getElementById('answered').textContent='0';document.getElementById('testProgress').style.width='0%';const root=document.getElementById('testQuestions');root.innerHTML='';testData.forEach((d,idx)=>{const box=document.createElement('div');box.style.cssText='border-top:1px solid #e2e9dc;padding:12px 0';const p=document.createElement('p');p.style.cssText='font-size:13px;font-weight:900;margin:0 0 7px';p.textContent=(idx+1)+'. '+d.q;box.appendChild(p);const opts=document.createElement('div');d.o.forEach((v,i)=>{const b=document.createElement('button');b.className='quiz-option';b.textContent=String.fromCharCode(65+i)+'. '+v;b.onclick=()=>{if(testSubmitted)return;answers[idx]=i;[...opts.children].forEach(x=>x.classList.remove('chosen'));b.style.background='#ffe1eb';document.getElementById('answered').textContent=Object.keys(answers).length;document.getElementById('testProgress').style.width=(Object.keys(answers).length/10*100)+'%'};opts.appendChild(b)});box.appendChild(opts);root.appendChild(box)})}
+document.getElementById('submitTest').onclick=()=>{const missing=10-Object.keys(answers).length;if(missing){document.getElementById('testFeedback').textContent='Masih ada '+missing+' soal yang belum dijawab.';document.getElementById('testFeedback').className='feedback no';return}testSubmitted=true;let score=0;const review=document.getElementById('testReview');review.innerHTML='<h3 style="font-size:16px">Pembahasan jawaban</h3>';[...document.querySelectorAll('#testQuestions > div')].forEach((box,idx)=>{const d=testData[idx],correct=answers[idx]===d.a;if(correct)score+=10;const opts=box.querySelectorAll('button');opts.forEach((b,i)=>{b.disabled=true;if(i===d.a)b.classList.add('correct');else if(i===answers[idx])b.classList.add('wrong')});const p=document.createElement('p');p.className='feedback '+(correct?'ok':'no');p.textContent='Soal '+(idx+1)+': '+(correct?'Benar. ':'Belum tepat. ')+d.e;review.appendChild(p)});const result=document.getElementById('testResult');result.style.display='block';result.innerHTML='<div>HASIL FINAL TEST</div><div class="big-score">'+score+'/100</div><h3>'+(score>=80?'Hebat! Kamu menguasai materi!':score>=60?'Bagus, terus berlatih!':'Jangan menyerah, pelajari materi lalu coba lagi!')+'</h3><p>Jawaban benar '+score/10+' dari 10 soal.</p>';review.style.display='block';document.getElementById('testFeedback').textContent='Tes selesai! Baca pembahasan untuk belajar dari kesalahan.';document.getElementById('testFeedback').className='feedback ok';};
+document.getElementById('resetTest').onclick=renderTest;renderTest();
+</script>
+</body>
+</html>
